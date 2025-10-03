@@ -12,3 +12,7 @@
 ## Machine Learning Project
 1. Predicting Breast Cancer
 2. Movie Recommendation System Using Collaborative Filtering
+
+## Excel Project
+1. Ferns and Petal Sales Analysis
+2. Coffee Shop Sales Analysis
