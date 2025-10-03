@@ -8,6 +8,8 @@
 5. AI Financial & Market Data Analysis
 6. Exploratory Data Analytics in Hospitality Domain
 7. Height Analysis Using Normal Distribution
+8. Sports League Outliers Detection
+9. Employees Workhours Analysis
 
 ## Machine Learning Project
 1. Predicting Breast Cancer
