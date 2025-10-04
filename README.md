@@ -1,4 +1,4 @@
-# Data-Science-Projects
+# 100 Data_Science_Projects
 
 ## Data Analysis & Visualizations
 1. Zomato Data Analysis
@@ -10,6 +10,7 @@
 7. Height Analysis Using Normal Distribution
 8. Sports League Outliers Detection
 9. Employees Workhours Analysis
+10. AtliQo Bank Credit Card Launch
 
 ## Machine Learning Project
 1. Predicting Breast Cancer
