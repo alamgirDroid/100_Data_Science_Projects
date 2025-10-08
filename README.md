@@ -15,6 +15,7 @@
 ## Machine Learning Project
 1. Predicting Breast Cancer
 2. Movie Recommendation System Using Collaborative Filtering
+3. Predicted Daily Temperature
 
 ## Excel Project
 1. Ferns and Petal Sales Analysis
