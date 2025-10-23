@@ -16,6 +16,7 @@
 1. Predicting Breast Cancer
 2. Movie Recommendation System Using Collaborative Filtering
 3. Predicted Daily Temperature
+4. Instagram Reach Analysis and Prediction
 
 ## Excel Project
 1. Ferns and Petal Sales Analysis
