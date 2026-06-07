@@ -21,3 +21,6 @@
 ## Excel Project
 1. Ferns and Petal Sales Analysis
 2. Coffee Shop Sales Analysis
+
+## SQL Project
+1.Retail Sales Analysis
