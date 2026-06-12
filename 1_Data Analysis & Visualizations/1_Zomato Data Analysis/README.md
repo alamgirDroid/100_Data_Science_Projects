@@ -1,227 +1,203 @@
-# Retail Sales Analysis SQL Project
+# 🍽️ Zomato Data Analysis Using Python
 
-## Project Overview
+## 📌 Project Overview
 
-**Project Title**: Retail Sales Analysis  
-**Level**: Beginner  
-**Database**: `p1_retail_db`
+This project analyzes the Zomato restaurant dataset using Python to uncover customer preferences and restaurant trends. The goal is to generate business insights that can help restaurant owners and stakeholders make data-driven decisions.
 
-This project is designed to demonstrate SQL skills and techniques typically used by data analysts to explore, clean, and analyze retail sales data. The project involves setting up a retail sales database, performing exploratory data analysis (EDA), and answering specific business questions through SQL queries. This project is ideal for those who are starting their journey in data analysis and want to build a solid foundation in SQL.
+### Key Questions Answered
 
-## Objectives
+* Do more restaurants provide online delivery compared to offline services?
+* Which restaurant types are most popular among customers?
+* What price range do couples prefer for dining out?
+* How do restaurant ratings differ between online and offline ordering options?
+* Which restaurant received the highest number of votes?
 
-1. **Set up a retail sales database**: Create and populate a retail sales database with the provided sales data.
-2. **Data Cleaning**: Identify and remove any records with missing or null values.
-3. **Exploratory Data Analysis (EDA)**: Perform basic exploratory data analysis to understand the dataset.
-4. **Business Analysis**: Use SQL to answer specific business questions and derive insights from the sales data.
+---
 
-## Project Structure
+## 📊 Dataset Information
 
-### 1. Database Setup
+The dataset contains information about restaurants, including:
 
-- **Database Creation**: The project starts by creating a database named `p1_retail_db`.
-- **Table Creation**: A table named `retail_sales` is created to store the sales data. The table structure includes columns for transaction ID, sale date, sale time, customer ID, gender, age, product category, quantity sold, price per unit, cost of goods sold (COGS), and total sale amount.
+| Column Name                 | Description                           |
+| --------------------------- | ------------------------------------- |
+| name                        | Restaurant name                       |
+| online_order                | Online ordering availability (Yes/No) |
+| book_table                  | Table booking availability            |
+| rate                        | Restaurant rating                     |
+| votes                       | Number of customer votes              |
+| approx_cost(for two people) | Estimated cost for two people         |
+| listed_in(type)             | Restaurant category/type              |
 
-```sql
-CREATE DATABASE p1_retail_db;
+---
 
-CREATE TABLE retail_sales
-(
-    transactions_id INT PRIMARY KEY,
-    sale_date DATE,	
-    sale_time TIME,
-    customer_id INT,	
-    gender VARCHAR(10),
-    age INT,
-    category VARCHAR(35),
-    quantity INT,
-    price_per_unit FLOAT,	
-    cogs FLOAT,
-    total_sale FLOAT
-);
+## 🛠️ Technologies Used
+
+* Python
+* Pandas
+* NumPy
+* Matplotlib
+* Seaborn
+* Jupyter Notebook
+
+---
+
+## 📂 Project Workflow
+
+### 1. Import Required Libraries
+
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 ```
 
-### 2. Data Exploration & Cleaning
+### 2. Load Dataset
 
-- **Record Count**: Determine the total number of records in the dataset.
-- **Customer Count**: Find out how many unique customers are in the dataset.
-- **Category Count**: Identify all unique product categories in the dataset.
-- **Null Value Check**: Check for any null values in the dataset and delete records with missing data.
-
-```sql
-SELECT COUNT(*) FROM retail_sales;
-SELECT COUNT(DISTINCT customer_id) FROM retail_sales;
-SELECT DISTINCT category FROM retail_sales;
-
-SELECT * FROM retail_sales
-WHERE 
-    sale_date IS NULL OR sale_time IS NULL OR customer_id IS NULL OR 
-    gender IS NULL OR age IS NULL OR category IS NULL OR 
-    quantity IS NULL OR price_per_unit IS NULL OR cogs IS NULL;
-
-DELETE FROM retail_sales
-WHERE 
-    sale_date IS NULL OR sale_time IS NULL OR customer_id IS NULL OR 
-    gender IS NULL OR age IS NULL OR category IS NULL OR 
-    quantity IS NULL OR price_per_unit IS NULL OR cogs IS NULL;
+```python
+df = pd.read_csv("Zomato_data.csv")
 ```
 
-### 3. Data Analysis & Findings
+### 3. Data Cleaning
 
-The following SQL queries were developed to answer specific business questions:
+The `rate` column contains values such as `4.1/5`. These values were converted into float format.
 
-1. **Write a SQL query to retrieve all columns for sales made on '2022-11-05**:
-```sql
-SELECT *
-FROM retail_sales
-WHERE sale_date = '2022-11-05';
+```python
+def handleRate(value):
+    value = str(value).split('/')
+    value = value[0]
+    return float(value)
+
+df['rate'] = df['rate'].apply(handleRate)
 ```
 
-2. **Write a SQL query to retrieve all transactions where the category is 'Clothing' and the quantity sold is more than 4 in the month of Nov-2022**:
-```sql
-SELECT 
-  *
-FROM retail_sales
-WHERE 
-    category = 'Clothing'
-    AND 
-    TO_CHAR(sale_date, 'YYYY-MM') = '2022-11'
-    AND
-    quantity >= 4
+### 4. Data Exploration
+
+* Checked dataset structure using `df.info()`
+* Verified missing values using `df.isna().sum()`
+
+---
+
+## 📈 Analysis & Findings
+
+### 1. Restaurant Type Distribution
+
+A count plot was used to identify the most common restaurant categories.
+
+**Finding:**
+Dining restaurants represent the largest category in the dataset.
+
+---
+
+### 2. Votes by Restaurant Type
+
+Customer votes were aggregated by restaurant type.
+
+**Finding:**
+Dining restaurants received the highest number of votes, indicating greater customer preference.
+
+---
+
+### 3. Most Voted Restaurant
+
+```python
+max_votes = df['votes'].max()
 ```
 
-3. **Write a SQL query to calculate the total sales (total_sale) for each category.**:
-```sql
-SELECT 
-    category,
-    SUM(total_sale) as net_sale,
-    COUNT(*) as total_orders
-FROM retail_sales
-GROUP BY 1
-```
+**Finding:**
+🏆 **Empire Restaurant** received the highest number of customer votes.
 
-4. **Write a SQL query to find the average age of customers who purchased items from the 'Beauty' category.**:
-```sql
-SELECT
-    ROUND(AVG(age), 2) as avg_age
-FROM retail_sales
-WHERE category = 'Beauty'
-```
+---
 
-5. **Write a SQL query to find all transactions where the total_sale is greater than 1000.**:
-```sql
-SELECT * FROM retail_sales
-WHERE total_sale > 1000
-```
+### 4. Online Order Availability
 
-6. **Write a SQL query to find the total number of transactions (transaction_id) made by each gender in each category.**:
-```sql
-SELECT 
-    category,
-    gender,
-    COUNT(*) as total_trans
-FROM retail_sales
-GROUP 
-    BY 
-    category,
-    gender
-ORDER BY 1
-```
+The distribution of restaurants offering online ordering was analyzed.
 
-7. **Write a SQL query to calculate the average sale for each month. Find out best selling month in each year**:
-```sql
-SELECT 
-       year,
-       month,
-    avg_sale
-FROM 
-(    
-SELECT 
-    EXTRACT(YEAR FROM sale_date) as year,
-    EXTRACT(MONTH FROM sale_date) as month,
-    AVG(total_sale) as avg_sale,
-    RANK() OVER(PARTITION BY EXTRACT(YEAR FROM sale_date) ORDER BY AVG(total_sale) DESC) as rank
-FROM retail_sales
-GROUP BY 1, 2
-) as t1
-WHERE rank = 1
-```
+**Finding:**
+Most restaurants do not provide online ordering services.
 
-8. **Write a SQL query to find the top 5 customers based on the highest total sales **:
-```sql
-SELECT 
-    customer_id,
-    SUM(total_sale) as total_sales
-FROM retail_sales
-GROUP BY 1
-ORDER BY 2 DESC
-LIMIT 5
-```
+---
 
-9. **Write a SQL query to find the number of unique customers who purchased items from each category.**:
-```sql
-SELECT 
-    category,    
-    COUNT(DISTINCT customer_id) as cnt_unique_cs
-FROM retail_sales
-GROUP BY category
-```
+### 5. Ratings Distribution
 
-10. **Write a SQL query to create each shift and number of orders (Example Morning <12, Afternoon Between 12 & 17, Evening >17)**:
-```sql
-WITH hourly_sale
-AS
-(
-SELECT *,
-    CASE
-        WHEN EXTRACT(HOUR FROM sale_time) < 12 THEN 'Morning'
-        WHEN EXTRACT(HOUR FROM sale_time) BETWEEN 12 AND 17 THEN 'Afternoon'
-        ELSE 'Evening'
-    END as shift
-FROM retail_sales
-)
-SELECT 
-    shift,
-    COUNT(*) as total_orders    
-FROM hourly_sale
-GROUP BY shift
-```
+A histogram was used to visualize restaurant ratings.
 
-## Findings
+**Finding:**
+Most restaurants have ratings between **3.5 and 4.0**.
 
-- **Customer Demographics**: The dataset includes customers from various age groups, with sales distributed across different categories such as Clothing and Beauty.
-- **High-Value Transactions**: Several transactions had a total sale amount greater than 1000, indicating premium purchases.
-- **Sales Trends**: Monthly analysis shows variations in sales, helping identify peak seasons.
-- **Customer Insights**: The analysis identifies the top-spending customers and the most popular product categories.
+---
 
-## Reports
+### 6. Cost Preference for Couples
 
-- **Sales Summary**: A detailed report summarizing total sales, customer demographics, and category performance.
-- **Trend Analysis**: Insights into sales trends across different months and shifts.
-- **Customer Insights**: Reports on top customers and unique customer counts per category.
+The approximate cost for two people was analyzed.
 
-## Conclusion
+**Finding:**
+Most couples prefer restaurants with an average cost of **₹300**.
 
-This project serves as a comprehensive introduction to SQL for data analysts, covering database setup, data cleaning, exploratory data analysis, and business-driven SQL queries. The findings from this project can help drive business decisions by understanding sales patterns, customer behavior, and product performance.
+---
 
-## How to Use
+### 7. Online vs Offline Ratings
 
-1. **Clone the Repository**: Clone this project repository from GitHub.
-2. **Set Up the Database**: Run the SQL scripts provided in the `database_setup.sql` file to create and populate the database.
-3. **Run the Queries**: Use the SQL queries provided in the `analysis_queries.sql` file to perform your analysis.
-4. **Explore and Modify**: Feel free to modify the queries to explore different aspects of the dataset or answer additional business questions.
+A boxplot compared ratings of restaurants with and without online ordering.
 
-## Author - Zero Analyst
+**Finding:**
+Restaurants offering online ordering generally received higher ratings than those that did not.
 
-This project is part of my portfolio, showcasing the SQL skills essential for data analyst roles. If you have any questions, feedback, or would like to collaborate, feel free to get in touch!
+---
 
-### Stay Updated and Join the Community
+### 8. Restaurant Type vs Online Ordering
 
-For more content on SQL, data analysis, and other data-related topics, make sure to follow me on social media and join our community:
+A heatmap was created to analyze the relationship between restaurant type and online ordering availability.
 
-- **YouTube**: [Subscribe to my channel for tutorials and insights](https://www.youtube.com/@zero_analyst)
-- **Instagram**: [Follow me for daily tips and updates](https://www.instagram.com/zero_analyst/)
-- **LinkedIn**: [Connect with me professionally](https://www.linkedin.com/in/najirr)
-- **Discord**: [Join our community to learn and grow together](https://discord.gg/36h5f2Z5PK)
+**Finding:**
 
-Thank you for your support, and I look forward to connecting with you!
+* Dining restaurants are more likely to receive offline orders.
+* Cafes tend to receive more online orders.
+* Customers generally prefer in-person dining at restaurants but online ordering from cafes.
+
+---
+
+## 📊 Visualizations Included
+
+* Count Plot of Restaurant Types
+* Votes by Restaurant Type
+* Online Order Availability Count Plot
+* Ratings Distribution Histogram
+* Cost Distribution for Couples
+* Online vs Offline Rating Boxplot
+* Restaurant Type vs Online Order Heatmap
+
+---
+
+## 🎯 Key Insights
+
+✅ Dining restaurants dominate the market.
+
+✅ Empire Restaurant is the most popular based on customer votes.
+
+✅ Most customers prefer restaurants with moderate pricing.
+
+✅ Online ordering is associated with better restaurant ratings.
+
+✅ Customer behavior differs between restaurant categories and ordering methods.
+
+---
+
+## 🚀 Future Improvements
+
+* Perform sentiment analysis on customer reviews.
+* Build interactive dashboards using Power BI or Tableau.
+* Create machine learning models to predict restaurant ratings.
+* Analyze location-wise restaurant performance.
+* Develop recommendation systems for restaurant suggestions.
+
+---
+
+## 📧 Author
+
+**Alamgir Hossen**
+
+Aspiring Data Analyst | Data Science & Machine Learning Enthusiast
+
+GitHub:(https://github.com/alamgirDroid)
+
