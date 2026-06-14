@@ -24,3 +24,4 @@
 
 ## SQL Project
 1.Retail Sales Analysis
+2.Library Management System
