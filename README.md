@@ -23,5 +23,5 @@
 2. Coffee Shop Sales Analysis
 
 ## SQL Project
-1.Retail Sales Analysis
-2.Library Management System
+1. Retail Sales Analysis
+2. Library Management System
